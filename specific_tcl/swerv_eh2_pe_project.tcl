@@ -44,7 +44,15 @@
   connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/btb_ext_in_pkt]
   connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/ic_data_ext_in_pkt]
   connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/ic_tag_ext_in_pkt]
-  connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/timer_int]
+  
+  # connect timer interrupt for RTOS capable build
+  if {$rtos == 0} {
+  	connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/timer_int]
+  } else {
+  	connect_bd_net [get_bd_pins CLINT_0/timer_int] [get_bd_pins swerv_eh2_0/timer_int]
+  }
+  
+  
   connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/soft_int]
   connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins swerv_eh2_0/extintsrc_req]
 
@@ -92,10 +100,17 @@
 
 proc create_specific_addr_segs {} {
   variable lmem
+  variable rtos
+  
   # Create specific address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces swerv_eh2_0/lsu_axi] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
   create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces swerv_eh2_0/lsu_axi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
   create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces swerv_eh2_0/ifu_axi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  
+  # Connect RTOS-specific parts
+  if {$rtos == 1} {
+  	create_bd_addr_seg -range 0x00010000 -offset 0x11020000 [get_bd_addr_spaces swerv_eh2_0/lsu_axi] [get_bd_addr_segs CLINT_0/axi_l/reg0] SEG_CLINT_0_reg0
+  }
 }
 
 proc get_external_mem_addr_space {} {

@@ -12,6 +12,7 @@ set bCheckIPsPassed 1
   $current_core\
   esa.cs.tu-darmstadt.de:axi:axi_ctrl:0.1\
   xilinx.com:ip:proc_sys_reset:5.0\
+  esa.informatik.tu-darmstadt.de:user:CLINT:1.0\
   "
 
    set list_ips_missing ""

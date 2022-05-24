@@ -36,6 +36,7 @@ if { $::argc > 0 } {
       "--maxi"         { incr i; set maxi_ports [lindex $::argv $i] }
       "--cache"		   { incr i; set cache [lindex $::argv $i] }
       "--project_name" { incr i; set project_name [lindex $::argv $i] }
+      "--rtos"         { incr i; set rtos [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {

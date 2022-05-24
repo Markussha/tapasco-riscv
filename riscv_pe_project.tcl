@@ -94,6 +94,7 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
   variable maxi_ports
+  variable rtos
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
 
@@ -135,13 +136,16 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   source common/place_tapasco_control.tcl
 
   source common/place_local_memory.tcl
+  
+  if {$rtos == 1} {
+  	source common/place_rtos.tcl
+  }
 
   source specific_tcl/${project_name}_project.tcl
 
   source common/connect_common_interfaces.tcl
   
   # Create port connections
-  
   source common/connect_common_ports.tcl
   
   

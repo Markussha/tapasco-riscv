@@ -9,3 +9,9 @@ if {$maxi_ports == 2} {
 	connect_bd_net -net CLK_1 [get_bd_pins dmaOffset2/CLK]
 	connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins dmaOffset2/RST_N]
 }
+
+# Connect RTOS-specific IPs
+if {$rtos == 1} {
+	connect_bd_net -net CLK_1 [get_bd_pins CLINT_0/CLK] [get_bd_pins axi_interconnect_0/M01_ACLK]
+	connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins CLINT_0/RST_N]
+}
